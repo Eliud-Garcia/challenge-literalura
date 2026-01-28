@@ -1,5 +1,6 @@
 package com.alura.literalura;
 
+import com.alura.literalura.service.ApiConnection;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,8 @@ public class LiteraluraApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("hola");
+		ApiConnection api = new ApiConnection();
+		String ans = api.getData("https://gutendex.com/books/1/");
+		System.out.println(ans);
 	}
 }
