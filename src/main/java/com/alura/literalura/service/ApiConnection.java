@@ -22,6 +22,6 @@ public class ApiConnection {
         }catch (Exception e){
             System.err.println("Error en la peticion de la API " + e.toString());
         }
-        return "null";
+        return null;
     }
 }
