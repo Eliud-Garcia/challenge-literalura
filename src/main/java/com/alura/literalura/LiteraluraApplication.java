@@ -1,5 +1,6 @@
 package com.alura.literalura;
 
+import com.alura.literalura.main.Menu;
 import com.alura.literalura.model.BookData;
 import com.alura.literalura.service.ApiConnection;
 import com.alura.literalura.service.ConvertData;
@@ -16,13 +17,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		ApiConnection api = new ApiConnection();
-		String ans = api.getData("https://gutendex.com/books/1/");
-		System.out.println(ans);
-
-		//probando conversor
-		ConvertData cd = new ConvertData();
-		BookData data = cd.getDataFromJson(ans, BookData.class);
-		System.out.println(data);
+		Menu menu = new Menu();
+		menu.init();
 	}
 }
