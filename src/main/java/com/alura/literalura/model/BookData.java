@@ -8,11 +8,10 @@ import java.util.List;
 //para ignorar los datos que no estan mapeados
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-public record BooksData(
+public record BookData(
         @JsonAlias("title") String title,
         @JsonAlias("subjects") List<String> subjects,
-        //TODO: agregar record para los datos de los autores
-        //@JsonAlias("authors") List<String> authors,
+        @JsonAlias("authors") List<AuthorData> authors,
         @JsonAlias("summaries") List<String> summaries,
         @JsonAlias("languages") List<String> languages,
         @JsonAlias("copyright") Boolean copyright,

@@ -1,6 +1,6 @@
 package com.alura.literalura;
 
-import com.alura.literalura.model.BooksData;
+import com.alura.literalura.model.BookData;
 import com.alura.literalura.service.ApiConnection;
 import com.alura.literalura.service.ConvertData;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +22,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 
 		//probando conversor
 		ConvertData cd = new ConvertData();
-		BooksData data = cd.getDataFromJson(ans, BooksData.class);
+		BookData data = cd.getDataFromJson(ans, BookData.class);
 		System.out.println(data);
 	}
 }
