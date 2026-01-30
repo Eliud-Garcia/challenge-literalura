@@ -1,11 +1,11 @@
 package com.alura.literalura.main;
 
-import com.alura.literalura.model.BookData;
-import com.alura.literalura.model.GutendexResponseData;
+import com.alura.literalura.model.*;
 import com.alura.literalura.service.ApiConnection;
 import com.alura.literalura.service.ConvertData;
 
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Menu {
     private Scanner en = new Scanner(System.in);
@@ -13,6 +13,9 @@ public class Menu {
     private ApiConnection api = new ApiConnection();
 
     private final String BASE_URL = "https://gutendex.com/books/";
+
+    private List<Book> allBooks = new ArrayList<>();
+    private List<Author> allAuthors = new ArrayList<>();
 
     private final String menu = """
             Bienvenido a literalura
@@ -35,19 +38,24 @@ public class Menu {
             switch (option){
                 case 1:
                     System.out.println("1. Buscar libro por título");
+                    System.out.println("Ingresa el título del libro: ");
                     searchBookByTitle(en.nextLine());
                     break;
                 case 2:
                     System.out.println("2. Listar libros registrados");
+                    getAllBooks();
                     break;
                 case 3:
                     System.out.println("3. Listar autores registrados");
+                    getAllAuthors();
                     break;
                 case 4:
                     System.out.println("4. Listar autores vivos en un determinado año");
                     break;
                 case 5:
                     System.out.println("5. Listar libros por idioma");
+                    System.out.println("Ingresa el idioma EJ: en, es, zh");
+                    getBooksByLanguage(en.nextLine());
                     break;
                 case 0:
                     System.out.println("Has salido de literalura :)");
@@ -69,16 +77,46 @@ public class Menu {
             System.out.printf("No hay resultados para %s\n", title);
             return;
         }
+        AuthorData author = book.authors().stream().
+                findFirst().
+                orElse(new AuthorData(null, null, "unknown"));
+
+        String language = book.languages().stream()
+                        .findFirst().orElse("unknown");
 
         System.out.println("===========================");
         System.out.printf("Titulo: %s\n", book.title());
-        System.out.println("Autores: ");
-        book.authors().forEach(author -> {
-            System.out.printf("     Nombre: %s\n", author.name());
-            System.out.printf("     Año nacimiento: %d\n", author.birthYear());
-            System.out.printf("     Año fallecimiento: %d\n", author.deathYear());
-        });
-        System.out.printf("Descargas: %d\n", book.download_count());
+        System.out.printf("Idioma: %s\n", language);
+
+        System.out.println("Autor: ");
+        System.out.printf("     Nombre: %s\n", author.name());
+        System.out.printf("     Año nacimiento: %d\n", author.birthYear());
+        System.out.printf("     Año fallecimiento: %d\n", author.deathYear());
+
+        System.out.printf("Descargas: %d\n", book.downloadCount());
         System.out.println("===========================");
+
+        allBooks.add(new Book(book));
+        allAuthors.add(new Author(author));
+    }
+
+    public void getAllBooks(){
+        System.out.printf("Cantidad de libros: %d\n", allBooks.size());
+        allBooks.forEach(System.out::println);
+        System.out.println();
+    }
+
+    public void getAllAuthors(){
+        System.out.printf("Cantidad de autores: %d\n", allAuthors.size());
+        allAuthors.forEach(System.out::println);
+        System.out.println();
+    }
+
+    public void getBooksByLanguage(String language){
+        List<Book> ans = allBooks.stream().
+                filter(book -> book.getLanguage().equalsIgnoreCase(language))
+                .toList();
+        ans.forEach(System.out::println);
+        System.out.println();
     }
 }
