@@ -16,6 +16,6 @@ public record BookData(
         @JsonAlias("languages") List<String> languages,
         @JsonAlias("copyright") Boolean copyright,
         //@JsonAlias("formats") String formats,
-        @JsonAlias("download_count") Integer download_count
+        @JsonAlias("download_count") Integer downloadCount
 ) {
 }
