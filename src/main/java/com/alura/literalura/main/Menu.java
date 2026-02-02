@@ -33,6 +33,7 @@ public class Menu {
         System.out.println("Bienvenido a literalura");
         int option = 99;
         while(option != 0){
+            option = 99;
             System.out.println(menu);
             String input = en.nextLine();
             if(inputValidator.isValidInteger(input)){
