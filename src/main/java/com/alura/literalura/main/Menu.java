@@ -3,14 +3,16 @@ package com.alura.literalura.main;
 import com.alura.literalura.model.*;
 import com.alura.literalura.service.ApiConnection;
 import com.alura.literalura.service.ConvertData;
+import com.alura.literalura.service.InputValidator;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class Menu {
     private Scanner en = new Scanner(System.in);
     private ConvertData convert = new ConvertData();
     private ApiConnection api = new ApiConnection();
+    private InputValidator inputValidator = new InputValidator();
 
     private final String BASE_URL = "https://gutendex.com/books/";
 
@@ -18,7 +20,6 @@ public class Menu {
     private List<Author> allAuthors = new ArrayList<>();
 
     private final String menu = """
-            Bienvenido a literalura
             Ingresa una opción a través de su número:
             1. Buscar libro por título
             2. Listar libros registrados
@@ -29,11 +30,14 @@ public class Menu {
             """;
 
     public void init(){
-        int option = -1;
+        System.out.println("Bienvenido a literalura");
+        int option = 99;
         while(option != 0){
             System.out.println(menu);
-            option = en.nextInt();
-            en.nextLine();
+            String input = en.nextLine();
+            if(inputValidator.isValidInteger(input)){
+                option = Integer.parseInt(input);
+            }
 
             switch (option){
                 case 1:
@@ -51,6 +55,8 @@ public class Menu {
                     break;
                 case 4:
                     System.out.println("4. Listar autores vivos en un determinado año");
+                    int year = inputValidator.parseIntegerWithRetry("Ingresa un año válido", en);
+                    getLivingAuthorsByYear(year);
                     break;
                 case 5:
                     System.out.println("5. Listar libros por idioma");
@@ -112,6 +118,13 @@ public class Menu {
         System.out.println();
     }
 
+    public void getLivingAuthorsByYear(int year){
+        allAuthors.stream()
+                .filter(a -> a.getBirthYear() != null && a.getDeathYear() != null)
+                .filter(a -> a.getBirthYear() <= year && year <= a.getDeathYear())
+                .forEach(System.out::println);
+    }
+
     public void getBooksByLanguage(String language){
         List<Book> ans = allBooks.stream().
                 filter(book -> book.getLanguage().equalsIgnoreCase(language))
@@ -119,4 +132,6 @@ public class Menu {
         ans.forEach(System.out::println);
         System.out.println();
     }
+
+
 }
