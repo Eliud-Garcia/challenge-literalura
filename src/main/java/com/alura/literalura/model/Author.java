@@ -2,6 +2,9 @@ package com.alura.literalura.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "authors")
 public class Author {
@@ -13,6 +16,23 @@ public class Author {
     private String name;
     private Integer birthYear;
     private Integer deathYear;
+
+    /*Un autor puede tener muchos libros */
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books = new ArrayList<>();
+
+    public void addBook(Book book){
+        books.add(book);
+        book.setAuthor(this);
+    }
+
+    public void removeBook(Book book){
+        books.remove(book);
+        book.setAuthor(null);
+    }
+
+    public Author() {
+    }
 
     public Author(AuthorData author) {
         this.name = author.name();
@@ -50,6 +70,10 @@ public class Author {
 
     public void setDeathYear(Integer deathYear) {
         this.deathYear = deathYear;
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 
     @Override

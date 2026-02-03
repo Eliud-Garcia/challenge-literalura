@@ -16,6 +16,14 @@ public class Book {
     private String language;
     private Integer downloadCount;
 
+    /*Un libro debe tener un autor*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private Author author;
+
+    public Book() {
+    }
+
     public Book(BookData book) {
         this.title = book.title();
         this.language =  book.languages().stream()
@@ -53,6 +61,14 @@ public class Book {
 
     public void setDownloadCount(Integer downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     @Override

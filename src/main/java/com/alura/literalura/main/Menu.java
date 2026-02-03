@@ -1,6 +1,8 @@
 package com.alura.literalura.main;
 
 import com.alura.literalura.model.*;
+import com.alura.literalura.repository.AuthorRepository;
+import com.alura.literalura.repository.BookRepository;
 import com.alura.literalura.service.ApiConnection;
 import com.alura.literalura.service.ConvertData;
 import com.alura.literalura.service.InputValidator;
@@ -16,8 +18,8 @@ public class Menu {
 
     private final String BASE_URL = "https://gutendex.com/books/";
 
-    private List<Book> allBooks = new ArrayList<>();
-    private List<Author> allAuthors = new ArrayList<>();
+    private BookRepository bookRepo;
+    private AuthorRepository authorRepo;
 
     private final String menu = """
             Ingresa una opción a través de su número:
@@ -28,6 +30,11 @@ public class Menu {
             5. Listar libros por idioma
             0. Salir
             """;
+
+    public Menu(BookRepository bookRepo, AuthorRepository authorRepo){
+        this.bookRepo = bookRepo;
+        this.authorRepo = authorRepo;
+    }
 
     public void init(){
         System.out.println("Bienvenido a literalura");
@@ -56,6 +63,7 @@ public class Menu {
                     break;
                 case 4:
                     System.out.println("4. Listar autores vivos en un determinado año");
+                    System.out.println("Ingresa el año: ");
                     int year = inputValidator.parseIntegerWithRetry("Ingresa un año válido", en);
                     getLivingAuthorsByYear(year);
                     break;
@@ -103,35 +111,48 @@ public class Menu {
         System.out.printf("Descargas: %d\n", book.downloadCount());
         System.out.println("===========================");
 
-        allBooks.add(new Book(book));
-        allAuthors.add(new Author(author));
+        /* guardar un autor con su libro*/
+        Author authorSave = new Author(author);
+        Book bookSave = new Book(book);
+        authorSave.addBook(bookSave);
+
+        authorRepo.save(authorSave);
+
     }
 
     public void getAllBooks(){
+        List<Book> allBooks = bookRepo.findAll();
         System.out.printf("Cantidad de libros: %d\n", allBooks.size());
         allBooks.forEach(System.out::println);
         System.out.println();
     }
 
     public void getAllAuthors(){
+        List<Author> allAuthors = authorRepo.findAll();
         System.out.printf("Cantidad de autores: %d\n", allAuthors.size());
         allAuthors.forEach(System.out::println);
         System.out.println();
     }
 
     public void getLivingAuthorsByYear(int year){
+        /*
+        TODO: usar el repository para traer desde la base datos
         allAuthors.stream()
                 .filter(a -> a.getBirthYear() != null && a.getDeathYear() != null)
                 .filter(a -> a.getBirthYear() <= year && year <= a.getDeathYear())
                 .forEach(System.out::println);
+        */
     }
 
     public void getBooksByLanguage(String language){
+        /*
+        TODO: usar el repository para traer desde la base datos
         List<Book> ans = allBooks.stream().
                 filter(book -> book.getLanguage().equalsIgnoreCase(language))
                 .toList();
         ans.forEach(System.out::println);
         System.out.println();
+        */
     }
 
 
