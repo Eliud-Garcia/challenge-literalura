@@ -21,6 +21,8 @@ public class Menu {
     private BookRepository bookRepo;
     private AuthorRepository authorRepo;
 
+    Map<Integer, String> languagesOptions = new HashMap<>();
+
     private final String menu = """
             Ingresa una opción a través de su número:
             1. Buscar libro por título
@@ -36,7 +38,15 @@ public class Menu {
         this.authorRepo = authorRepo;
     }
 
+    public void preLoad(){
+        languagesOptions.put(1, "es");
+        languagesOptions.put(2, "en");
+        languagesOptions.put(3, "it");
+        languagesOptions.put(4, "zh");
+    }
+
     public void init(){
+        preLoad();
         System.out.println("Bienvenido a literalura");
         int option = 99;
         while(option != 0){
@@ -69,8 +79,17 @@ public class Menu {
                     break;
                 case 5:
                     System.out.println("5. Listar libros por idioma");
-                    System.out.println("Ingresa el idioma EJ: en, es, zh");
-                    getBooksByLanguage(en.nextLine());
+                    final String LANGUAGES = """
+                                1. Español
+                                2. Inglés
+                                3. Italiano
+                                4. Chino 
+                            """;
+
+                    System.out.println(LANGUAGES);
+                    System.out.println("Ingresa la opción correspondiente al idioma: ");
+                    int value = inputValidator.parseIntegerWithRetry("Ingresa la opción correspondiente al idioma: ", en);
+                    getBooksByLanguage(value);
                     break;
                 case 0:
                     System.out.println("Has salido de literalura :)");
@@ -144,15 +163,15 @@ public class Menu {
         */
     }
 
-    public void getBooksByLanguage(String language){
-        /*
-        TODO: usar el repository para traer desde la base datos
-        List<Book> ans = allBooks.stream().
-                filter(book -> book.getLanguage().equalsIgnoreCase(language))
-                .toList();
+    public void getBooksByLanguage(int value){
+        if(!languagesOptions.containsKey(value)){
+            System.out.printf("La opción del lenguaje (%d) no está disponible\n", value);
+            return;
+        }
+        List<Book> ans = bookRepo.findByLanguage(languagesOptions.get(value));
+        System.out.printf("Resultados encontrados: %d\n", ans.size());
         ans.forEach(System.out::println);
         System.out.println();
-        */
     }
 
 
