@@ -154,13 +154,11 @@ public class Menu {
     }
 
     public void getLivingAuthorsByYear(int year){
-        /*
-        TODO: usar el repository para traer desde la base datos
-        allAuthors.stream()
-                .filter(a -> a.getBirthYear() != null && a.getDeathYear() != null)
-                .filter(a -> a.getBirthYear() <= year && year <= a.getDeathYear())
-                .forEach(System.out::println);
-        */
+        List<Author> ans = authorRepo.
+                findByBirthYearIsNotNullAndDeathYearIsNotNullAndBirthYearLessThanEqualAndDeathYearGreaterThanEqual(year, year);
+        System.out.printf("Resultados encontrados: %d\n", ans.size());
+        ans.forEach(System.out::println);
+        System.out.println();
     }
 
     public void getBooksByLanguage(int value){
