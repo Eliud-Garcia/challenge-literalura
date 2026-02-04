@@ -35,4 +35,8 @@ Reemplaza los valores de las variables en el archivo **application.properties**
 spring.datasource.url=jdbc:postgresql://DB_HOST/DB_NAME
 spring.datasource.username=DB_POSTGRESQL_USER
 spring.datasource.password=DB_POSTGRESQL_PASSWORD
+```
+<p align="center">
+  <img src="./docs/Badge-Literalura.png" alt="Logo del proyecto" width="200"/>
+</p>
 
