@@ -23,6 +23,9 @@ Este proyecto fue construido usando:
 Este documento describe cómo configurar el entorno necesario para ejecutar el proyecto correctamente.
 
 ---
+## Base de datos
+
+Crea la base de datos para usarla en el proyecto, **lo recomendado es crear una vacía** y con el nombre de literalura, este nombre lo debes de indicar en el application.properties.
 
 ## 🌱 Variables de entorno
 
