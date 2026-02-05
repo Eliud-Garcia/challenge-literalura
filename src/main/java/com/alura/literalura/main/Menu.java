@@ -131,12 +131,16 @@ public class Menu {
         System.out.println("===========================");
 
         /* guardar un autor con su libro*/
-        Author authorSave = new Author(author);
-        Book bookSave = new Book(book);
-        authorSave.addBook(bookSave);
-
-        authorRepo.save(authorSave);
-
+        if(!authorRepo.existsByName(author.name())){
+            Author authorSave = new Author(author);
+            Book bookSave = new Book(book);
+            System.out.println("Autor guardado con éxito");
+            if(!bookRepo.existsByTitle(book.title())){
+                authorSave.addBook(bookSave);
+                System.out.println("Libro guardado con éxito");
+            }
+            authorRepo.save(authorSave);
+        }
     }
 
     public void getAllBooks(){
