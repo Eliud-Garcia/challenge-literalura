@@ -11,4 +11,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     //(l, r) deben ser iguales a dicho año
     List<Author> findByBirthYearIsNotNullAndDeathYearIsNotNullAndBirthYearLessThanEqualAndDeathYearGreaterThanEqual(int l, int r);
     boolean existsByName(String name);
+    Optional<Author> findByName(String name);
 }

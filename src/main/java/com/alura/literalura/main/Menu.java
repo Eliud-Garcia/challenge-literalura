@@ -4,12 +4,14 @@ import com.alura.literalura.model.*;
 import com.alura.literalura.repository.AuthorRepository;
 import com.alura.literalura.repository.BookRepository;
 import com.alura.literalura.service.ApiConnection;
+import com.alura.literalura.service.AuthorBookService;
 import com.alura.literalura.service.ConvertData;
 import com.alura.literalura.service.InputValidator;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-
+@Component
 public class Menu {
     private Scanner en = new Scanner(System.in);
     private ConvertData convert = new ConvertData();
@@ -20,6 +22,7 @@ public class Menu {
 
     private BookRepository bookRepo;
     private AuthorRepository authorRepo;
+    private final AuthorBookService service;
 
     Map<Integer, String> languagesOptions = new HashMap<>();
 
@@ -33,7 +36,8 @@ public class Menu {
             0. Salir
             """;
 
-    public Menu(BookRepository bookRepo, AuthorRepository authorRepo){
+    public Menu(BookRepository bookRepo, AuthorRepository authorRepo, AuthorBookService service){
+        this.service = service;
         this.bookRepo = bookRepo;
         this.authorRepo = authorRepo;
     }
@@ -131,16 +135,8 @@ public class Menu {
         System.out.println("===========================");
 
         /* guardar un autor con su libro*/
-        if(!authorRepo.existsByName(author.name())){
-            Author authorSave = new Author(author);
-            Book bookSave = new Book(book);
-            System.out.println("Autor guardado con éxito");
-            if(!bookRepo.existsByTitle(book.title())){
-                authorSave.addBook(bookSave);
-                System.out.println("Libro guardado con éxito");
-            }
-            authorRepo.save(authorSave);
-        }
+        service.saveAuthorWithBook(author, book);
+
     }
 
     public void getAllBooks(){
